@@ -26,11 +26,17 @@ def map_velocities_to_pwm_signal(velocity):
     return int(pwm_signal)
 
 
-def motor_command_callback(msg):
+def move_box_callback(msg):
     for (motor,setpoint) in zip(msg.motors,msg.set_points):
         set_servo_pulse(motor,setpoint)
         #rospy.loginfo(str(motor) + " " + str(setpoint))
 
+
+def gripper_command_callback(msg):
+    motor = msg.motors[0]
+    speed = msg.set_points[0]
+    pwm.set_pwm_freq(50)
+    pwm.set_pwm(motor, 0, int(speed))
 
 # Helper function to make setting a servo pulse width simpler.
 def set_servo_pulse(channel, input_speed):
@@ -40,7 +46,7 @@ def set_servo_pulse(channel, input_speed):
 
 
 # callback for gripper motor
-def set_speed_callback(msg): 
+def set_speed_callback(msg):
     pwm.set_pwm(3, 0, msg.data)
    # pwm.set_pwm(7, 0,msg.data)
    # time.sleep(5)
@@ -65,7 +71,8 @@ if __name__ == '__main__':
     print('Finished')
   # Initialize the node and name it.
     rospy.init_node('the_claw')
-    rospy.Subscriber("the_claw/MotorCommand", MotorCommand, motor_command_callback)
+    rospy.Subscriber("the_claw/MoveBox", MotorCommand, move_box_callback)
+    rospy.Subscriber("the_claw/CommandGripper", MotorCommand, gripper_command_callback)
     rospy.Subscriber("the_claw/SetSpeed", Int8, set_speed_callback)
 
     rospy.spin()
