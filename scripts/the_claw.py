@@ -19,7 +19,9 @@ def map_velocities_to_pwm_signal(velocity):
     elif (velocity > 0 and velocity <= 130) :
         pwm_signal = min_counter_clockwise_signal + velocity*stepsize
         print("in pos check: ", pwm_signal)
-    pwm_signal = 0
+    else:
+        pwm_signal = 0
+
     print("0 : ", pwm_signal)
 
     return int(pwm_signal)
