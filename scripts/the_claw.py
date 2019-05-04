@@ -7,7 +7,7 @@ import Adafruit_PCA9685
 import rospy
 from roboy_middleware_msgs.msg import MotorCommand
 from std_msgs.msg import Int8
-import box_mover as Mover
+from box_mover import *
 
 def motor_command_callback(msg):
     for (motor,setpoint) in zip(msg.motors,msg.set_points):
