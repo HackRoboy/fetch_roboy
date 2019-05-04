@@ -11,8 +11,8 @@ from std_msgs.msg import Int8
 
 def map_velocities_to_pwm_signal(velocity):
     stepsize = 0.3076 # 40/130
-    max_clockwise_signal = [270] # min_clockwise_signal = 310 - fastest at min
-    min_counter_clockwise_signal = [325] # max_counter_clockwise_signal = 365 - fastest at max
+    max_clockwise_signal =270 # min_clockwise_signal = 310 - fastest at min
+    min_counter_clockwise_signal = 325 # max_counter_clockwise_signal = 365 - fastest at max
     if (velocity < 0 and velocity >= -130):
         pwm_signal = max_clockwise_signal - velocity*stepsize
         print("in neg check: ", pwm_signal)
