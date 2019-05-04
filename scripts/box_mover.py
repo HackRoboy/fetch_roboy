@@ -28,4 +28,4 @@ class Mover():
             pwm_signal = min_counter_clockwise_signal + self.velocity*stepsize
         pwm_signal = 0
 
-        return pwm_signal
+        return int(pwm_signal)
