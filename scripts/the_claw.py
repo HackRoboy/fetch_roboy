@@ -7,19 +7,35 @@ import Adafruit_PCA9685
 import rospy
 from roboy_middleware_msgs.msg import MotorCommand
 from std_msgs.msg import Int8
-from box_mover import *
+
+
+def map_velocities_to_pwm_signal(velocity):
+    stepsize = 0.3076 # 40/130
+    max_clockwise_signal = [270] # min_clockwise_signal = 310 - fastest at min
+    min_counter_clockwise_signal = [325] # max_counter_clockwise_signal = 365 - fastest at max
+    if (velocity < 0 and velocity >= -130):
+        pwm_signal = max_clockwise_signal - velocity*stepsize
+        print("in neg check: ", pwm_signal)
+    elif (velocity > 0 and velocity <= 130) :
+        pwm_signal = min_counter_clockwise_signal + velocity*stepsize
+        print("in pos check: ", pwm_signal)
+    pwm_signal = 0
+    print("0 : ", pwm_signal)
+
+    return int(pwm_signal)
+
 
 def motor_command_callback(msg):
     for (motor,setpoint) in zip(msg.motors,msg.set_points):
-        set_servo_pulse(motor,int(setpoint))
+        set_servo_pulse(motor,setpoint)
         #rospy.loginfo(str(motor) + " " + str(setpoint))
+
 
 # Helper function to make setting a servo pulse width simpler.
 def set_servo_pulse(channel, input_speed):
-    mover = Mover(channel, input_speed)
-    output_signal = mover.map_velocities_to_pwm_signal()
+    output_signal = map_velocities_to_pwm_signal(input_speed)
     pwm.set_pwm_freq(50)
-    pwm.set_pwm(channel, 0, output_signal)
+    pwm.set_pwm(channel, 0, int(output_signal))
 
 
 def set_speed_callback(msg):
@@ -27,6 +43,7 @@ def set_speed_callback(msg):
    # pwm.set_pwm(7, 0,msg.data)
    # time.sleep(5)
    # pwm.set_pwm(7, 0, 0)
+
 
 # Main function.
 if __name__ == '__main__':

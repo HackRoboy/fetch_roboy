@@ -23,8 +23,11 @@ class Mover():
         min_counter_clockwise_signal = [325] # max_counter_clockwise_signal = 365 - fastest at max
         if (self.velocity < 0 and self.velocity >= -130):
             pwm_signal = max_clockwise_signal - self.velocity*stepsize
+            print("in neg check: ", pwm_signal)
         elif (self.velocity > 0 and self.velocity <= 130) :
             pwm_signal = min_counter_clockwise_signal + self.velocity*stepsize
+            print("in pos check: ", pwm_signal)
         pwm_signal = 0
+        print("0 : ", pwm_signal)
 
         return int(pwm_signal)
