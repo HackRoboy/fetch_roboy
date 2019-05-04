@@ -7,6 +7,7 @@ import Adafruit_PCA9685
 import rospy
 from roboy_middleware_msgs.msg import MotorCommand
 from std_msgs.msg import Int8
+from std_msgs.msg import Int16
 
 
 def map_velocities_to_pwm_signal(velocity):
@@ -33,10 +34,10 @@ def move_box_callback(msg):
 
 
 def gripper_command_callback(msg):
-    motor = msg.motors[0]
-    speed = msg.set_points[0]
+    gripper_pin = 3
+    speed = msg.data
     pwm.set_pwm_freq(50)
-    pwm.set_pwm(motor, 0, int(speed))
+    pwm.set_pwm(gripper_pin, 0, int(speed))
 
 # Helper function to make setting a servo pulse width simpler.
 def set_servo_pulse(channel, input_speed):
@@ -72,7 +73,7 @@ if __name__ == '__main__':
   # Initialize the node and name it.
     rospy.init_node('the_claw')
     rospy.Subscriber("the_claw/MoveBox", MotorCommand, move_box_callback)
-    rospy.Subscriber("the_claw/CommandGripper", MotorCommand, gripper_command_callback)
+    rospy.Subscriber("the_claw/CommandGripper", Int16, gripper_command_callback)
     rospy.Subscriber("the_claw/SetSpeed", Int8, set_speed_callback)
 
     rospy.spin()
