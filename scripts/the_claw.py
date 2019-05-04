@@ -39,8 +39,9 @@ def set_servo_pulse(channel, input_speed):
     pwm.set_pwm(channel, 0, int(output_signal))
 
 
-def set_speed_callback(msg):
-    pwm.set_all_pwm(0, msg.data)
+# callback for gripper motor
+def set_speed_callback(msg): 
+    pwm.set_pwm(3, 0, msg.data)
    # pwm.set_pwm(7, 0,msg.data)
    # time.sleep(5)
    # pwm.set_pwm(7, 0, 0)
