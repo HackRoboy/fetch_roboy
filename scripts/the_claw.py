@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 from __future__ import division
-import time
+import time, numpy
 
 # Import the PCA9685 module.
 import Adafruit_PCA9685
@@ -8,7 +8,7 @@ import rospy
 from roboy_middleware_msgs.msg import MotorCommand
 from std_msgs.msg import Int8
 from std_msgs.msg import Int16
-from geometry_msgs.msg import Pose
+from geometry_msgs.msg import Pose2D
 
 from the_rope_crawler import *
 
@@ -71,11 +71,11 @@ def set_servo_pulse(channel, input_speed):
 
 def goto_callback(msg):
     times = crawler.getServoTime(msg.x, msg.y, 1)
-    bot.setCurrentStatus(msg.data.x, msg.data.y, 2)
-    for (motor, time) in zip(pins_to_motors, times):
-        set_servo_pulse(motor, 130)
-        time.sleep(time)
-        set_servo_pulse(motor, 0)
+    bot.setCurrentStatus(msg.x, msg.y, 2)
+    for (m, t) in zip(pins_to_motors, times):
+        set_servo_pulse(m, numpy.sign(t) * 130)
+        time.sleep(numpy.sign(t) * t)
+        set_servo_pulse(m, 0)
 
 
 # Main function.
@@ -90,6 +90,6 @@ if __name__ == '__main__':
     rospy.init_node('the_claw')
     rospy.Subscriber("the_claw/MoveBox", MotorCommand, move_box_callback)
     rospy.Subscriber("the_claw/CommandGripper", Int16, gripper_command_callback)
-    rospy.Subscriber("the_claw/GoTo", Pose, goto_callback) 
+    rospy.Subscriber("the_claw/GoTo", Pose2D, goto_callback) 
 
     rospy.spin()
