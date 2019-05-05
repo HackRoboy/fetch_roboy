@@ -17,10 +17,13 @@ max_velocity = 130
 
 pins_to_motors = [7, 8, 9, 6]
 
+# map input RPM values (-130 ccw to 130 cw) to pwm signal
 def map_velocities_to_pwm_signal(velocity):
-    stepsize = 0.3076 # 40/130
-    max_clockwise_signal = 310 # min_clockwise_signal = 280 - fastest at min
-    min_counter_clockwise_signal = 325 # max_counter_clockwise_signal = 365 - fastest at max
+    max_clockwise_signal = 310  # slowest cw
+    min_clockwise_signal = 280  # fastest cw
+    min_counter_clockwise_signal = 325  # slowest ccw
+    max_counter_clockwise_signal = 365  # fastest ccw
+    stepsize = (max_clockwise_signal - min_clockwise_signal)/130
     if (velocity < 0 and velocity >= min_velocity):
         pwm_signal = max_clockwise_signal - (-velocity)*stepsize
         print("in neg check: ", pwm_signal)
@@ -36,15 +39,15 @@ def map_velocities_to_pwm_signal(velocity):
 
 
 def move_box_callback(msg):
-    for (motor,setpoint) in zip(msg.motors,msg.set_points):
+    for (motor, setpoint) in zip(msg.motors, msg.set_points):
         set_servo_pulse(motor, setpoint)
-        #rospy.loginfo(str(motor) + " " + str(setpoint))
 
 
+# map RPM -130 to 0 (ccw) and 0 to 130 (cw) to gripper motor frequence
 def gripper_command_callback(msg):
     gripper_pin = 3
     velocity = msg.data
-    stepsize = 0.23076 # 30/130
+    stepsize = 0.23076  # 30/130
     # max_counter_clockwise_signal = 175 # min_clockwise_signal = 150 - fastest at min
     # min_clockwise_signal = 120 # max_clockwise_signal = 150 - fastest at max
     if (velocity < 0 and velocity >= min_velocity):
@@ -69,6 +72,7 @@ def set_servo_pulse(channel, input_speed):
     pwm.set_pwm_freq(50)
     pwm.set_pwm(channel, 0, int(output_signal))
 
+
 def goto_callback(msg):
     weights, sleeping_time = crawler.getSpinningVelocity(msg.x, msg.y)
     bot.setCurrentStatus(msg.x, msg.y, 1)
@@ -77,7 +81,7 @@ def goto_callback(msg):
     print(sleeping_time)
     time.sleep(sleeping_time)
     for m in pins_to_motors:
-	set_servo_pulse(m, 0)
+        set_servo_pulse(m, 0)
 
 
 # Main function.
@@ -92,6 +96,6 @@ if __name__ == '__main__':
     rospy.init_node('the_claw')
     rospy.Subscriber("the_claw/MoveBox", MotorCommand, move_box_callback)
     rospy.Subscriber("the_claw/CommandGripper", Int16, gripper_command_callback)
-    rospy.Subscriber("the_claw/GoTo", Pose2D, goto_callback) 
+    rospy.Subscriber("the_claw/GoTo", Pose2D, goto_callback)
 
     rospy.spin()

@@ -28,7 +28,7 @@ def color_fill(color, wait):
     pixels.show()
     time.sleep(wait)
 
-#
+
 # def slice_alternating(wait):
 #     pixels[::2] = [RED] * (num_pixels // 2)
 #     pixels.show()
