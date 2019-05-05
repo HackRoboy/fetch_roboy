@@ -51,4 +51,4 @@ class RopeCrawler():
     def getSpinningVelocity(self, x_to, y_to):
         vector = self.getDirectionVector(x_to, y_to)
         turns = self._calculateTurns(vector)
-        return turns / np.max(np.abs(turns))
+        return turns / np.max(np.abs(turns)), np.max(np.abs(turns)) / 2.1

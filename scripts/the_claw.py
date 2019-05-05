@@ -74,6 +74,9 @@ def goto_callback(msg):
     bot.setCurrentStatus(msg.x, msg.y, 2)
     for (m, w) in zip(pins_to_motors, weights):
         set_servo_pulse(m, w * 130)
+    time.sleep(sleeping_time)
+    for m in pins_to_motors:
+	set_servo_pulse(m, 0)
 
 
 # Main function.
