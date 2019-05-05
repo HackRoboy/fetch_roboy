@@ -48,7 +48,7 @@ class RopeCrawler():
         circumference = 2 * np.pi * self.bot.current_reel_radius
         return length_arr / circumference
 
-    def getServoTime(self, x_to, y_to, servo_speed):
+    def getSpinningVelocity(self, x_to, y_to):
         vector = self.getDirectionVector(x_to, y_to)
         turns = self._calculateTurns(vector)
-        return turns / servo_speed
+        return turns / np.max(np.abs(turns))

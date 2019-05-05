@@ -70,12 +70,10 @@ def set_servo_pulse(channel, input_speed):
     pwm.set_pwm(channel, 0, int(output_signal))
 
 def goto_callback(msg):
-    times = crawler.getServoTime(msg.x, msg.y, 1)
+    weights, sleeping_time = crawler.getSpinningVelocity(msg.x, msg.y)
     bot.setCurrentStatus(msg.x, msg.y, 2)
-    for (m, t) in zip(pins_to_motors, times):
-        set_servo_pulse(m, numpy.sign(t) * 130)
-        time.sleep(numpy.sign(t) * t)
-        set_servo_pulse(m, 0)
+    for (m, w) in zip(pins_to_motors, weights):
+        set_servo_pulse(m, w * 130)
 
 
 # Main function.
