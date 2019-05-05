@@ -71,9 +71,10 @@ def set_servo_pulse(channel, input_speed):
 
 def goto_callback(msg):
     weights, sleeping_time = crawler.getSpinningVelocity(msg.x, msg.y)
-    bot.setCurrentStatus(msg.x, msg.y, 2)
+    bot.setCurrentStatus(msg.x, msg.y, 1)
     for (m, w) in zip(pins_to_motors, weights):
         set_servo_pulse(m, w * 130)
+    print(sleeping_time)
     time.sleep(sleeping_time)
     for m in pins_to_motors:
 	set_servo_pulse(m, 0)
@@ -84,7 +85,7 @@ if __name__ == '__main__':
     # Initialise the PCA9685 using the default address (0x40).
     pwm = Adafruit_PCA9685.PCA9685()
 
-    bot = Bot(20, 20, 2, 2)
+    bot = Bot(20, 20, 1, 1)
     crawler = RopeCrawler(bot, 400, 400)
 
     # Initialize the node and name it.

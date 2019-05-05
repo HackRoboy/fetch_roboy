@@ -46,9 +46,11 @@ class RopeCrawler():
 
     def _calculateTurns(self, length_arr):
         circumference = 2 * np.pi * self.bot.current_reel_radius
+	print(length_arr)
         return length_arr / circumference
 
     def getSpinningVelocity(self, x_to, y_to):
         vector = self.getDirectionVector(x_to, y_to)
         turns = self._calculateTurns(vector)
+	print(turns)
         return turns / np.max(np.abs(turns)), np.max(np.abs(turns)) / 2.1
