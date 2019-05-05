@@ -3,7 +3,7 @@ import time
 import adafruit_dotstar
 import board
 
-num_pixels = 30
+num_pixels = 20
 pixels = adafruit_dotstar.DotStar(board.A1, board.A2, num_pixels, brightness=0.1, auto_write=False)
 
 
@@ -26,59 +26,59 @@ def color_fill(color, wait):
     pixels.show()
     time.sleep(wait)
 
+#
+# def slice_alternating(wait):
+#     pixels[::2] = [RED] * (num_pixels // 2)
+#     pixels.show()
+#     time.sleep(wait)
+#     pixels[1::2] = [ORANGE] * (num_pixels // 2)
+#     pixels.show()
+#     time.sleep(wait)
+#     pixels[::2] = [YELLOW] * (num_pixels // 2)
+#     pixels.show()
+#     time.sleep(wait)
+#     pixels[1::2] = [GREEN] * (num_pixels // 2)
+#     pixels.show()
+#     time.sleep(wait)
+#     pixels[::2] = [TEAL] * (num_pixels // 2)
+#     pixels.show()
+#     time.sleep(wait)
+#     pixels[1::2] = [CYAN] * (num_pixels // 2)
+#     pixels.show()
+#     time.sleep(wait)
+#     pixels[::2] = [BLUE] * (num_pixels // 2)
+#     pixels.show()
+#     time.sleep(wait)
+#     pixels[1::2] = [PURPLE] * (num_pixels // 2)
+#     pixels.show()
+#     time.sleep(wait)
+#     pixels[::2] = [MAGENTA] * (num_pixels // 2)
+#     pixels.show()
+#     time.sleep(wait)
+#     pixels[1::2] = [WHITE] * (num_pixels // 2)
+#     pixels.show()
+#     time.sleep(wait)
 
-def slice_alternating(wait):
-    pixels[::2] = [RED] * (num_pixels // 2)
-    pixels.show()
-    time.sleep(wait)
-    pixels[1::2] = [ORANGE] * (num_pixels // 2)
-    pixels.show()
-    time.sleep(wait)
-    pixels[::2] = [YELLOW] * (num_pixels // 2)
-    pixels.show()
-    time.sleep(wait)
-    pixels[1::2] = [GREEN] * (num_pixels // 2)
-    pixels.show()
-    time.sleep(wait)
-    pixels[::2] = [TEAL] * (num_pixels // 2)
-    pixels.show()
-    time.sleep(wait)
-    pixels[1::2] = [CYAN] * (num_pixels // 2)
-    pixels.show()
-    time.sleep(wait)
-    pixels[::2] = [BLUE] * (num_pixels // 2)
-    pixels.show()
-    time.sleep(wait)
-    pixels[1::2] = [PURPLE] * (num_pixels // 2)
-    pixels.show()
-    time.sleep(wait)
-    pixels[::2] = [MAGENTA] * (num_pixels // 2)
-    pixels.show()
-    time.sleep(wait)
-    pixels[1::2] = [WHITE] * (num_pixels // 2)
-    pixels.show()
-    time.sleep(wait)
-
-
-def slice_rainbow(wait):
-    pixels[::6] = [RED] * (num_pixels // 6)
-    pixels.show()
-    time.sleep(wait)
-    pixels[1::6] = [ORANGE] * (num_pixels // 6)
-    pixels.show()
-    time.sleep(wait)
-    pixels[2::6] = [YELLOW] * (num_pixels // 6)
-    pixels.show()
-    time.sleep(wait)
-    pixels[3::6] = [GREEN] * (num_pixels // 6)
-    pixels.show()
-    time.sleep(wait)
-    pixels[4::6] = [BLUE] * (num_pixels // 6)
-    pixels.show()
-    time.sleep(wait)
-    pixels[5::6] = [PURPLE] * (num_pixels // 6)
-    pixels.show()
-    time.sleep(wait)
+#
+# def slice_rainbow(wait):
+#     pixels[::6] = [RED] * (num_pixels // 6)
+#     pixels.show()
+#     time.sleep(wait)
+#     pixels[1::6] = [ORANGE] * (num_pixels // 6)
+#     pixels.show()
+#     time.sleep(wait)
+#     pixels[2::6] = [YELLOW] * (num_pixels // 6)
+#     pixels.show()
+#     time.sleep(wait)
+#     pixels[3::6] = [GREEN] * (num_pixels // 6)
+#     pixels.show()
+#     time.sleep(wait)
+#     pixels[4::6] = [BLUE] * (num_pixels // 6)
+#     pixels.show()
+#     time.sleep(wait)
+#     pixels[5::6] = [PURPLE] * (num_pixels // 6)
+#     pixels.show()
+#     time.sleep(wait)
 
 
 def rainbow_cycle(wait):
@@ -114,13 +114,13 @@ while True:
     color_fill(MAGENTA, 0.5)
     color_fill(WHITE, 0.5)
 
-    # Increase or decrease this to speed up or slow down the animation.
-    slice_alternating(0.1)
-
-    color_fill(WHITE, 0.5)
-
-    # Increase or decrease this to speed up or slow down the animation.
-    slice_rainbow(0.1)
+    # # Increase or decrease this to speed up or slow down the animation.
+    # slice_alternating(0.1)
+    #
+    # color_fill(WHITE, 0.5)
+    #
+    # # Increase or decrease this to speed up or slow down the animation.
+    # slice_rainbow(0.1)
 
     time.sleep(0.5)
 
