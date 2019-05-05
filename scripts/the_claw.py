@@ -9,35 +9,54 @@ from roboy_middleware_msgs.msg import MotorCommand
 from std_msgs.msg import Int8
 from std_msgs.msg import Int16
 
+min_velocity = -130
+max_velocity = 130
 
 def map_velocities_to_pwm_signal(velocity):
     stepsize = 0.3076 # 40/130
-    max_clockwise_signal =310 # min_clockwise_signal = 280 - fastest at min
+    max_clockwise_signal = 310 # min_clockwise_signal = 280 - fastest at min
     min_counter_clockwise_signal = 325 # max_counter_clockwise_signal = 365 - fastest at max
-    if (velocity < 0 and velocity >= -130):
+    if (velocity < 0 and velocity >= min_velocity):
         pwm_signal = max_clockwise_signal - (-velocity)*stepsize
         print("in neg check: ", pwm_signal)
-    elif (velocity > 0 and velocity <= 130) :
+    elif (velocity > 0 and velocity <= max_velocity):
         pwm_signal = min_counter_clockwise_signal + velocity*stepsize
         print("in pos check: ", pwm_signal)
-    else:
+    elif velocity == 0:
         pwm_signal = 0
-        print("0 : ", pwm_signal)
-
+        print("Turning off box motors.")
+    else:
+        print("Carefull, stay within speed boundaries of -130 to 130!")
     return int(pwm_signal)
 
 
 def move_box_callback(msg):
     for (motor,setpoint) in zip(msg.motors,msg.set_points):
-        set_servo_pulse(motor,setpoint)
+        set_servo_pulse(motor, setpoint)
         #rospy.loginfo(str(motor) + " " + str(setpoint))
 
 
 def gripper_command_callback(msg):
     gripper_pin = 3
-    speed = msg.data
+    velocity = msg.data
+    stepsize = 0.23076 # 30/130
+    # max_counter_clockwise_signal = 175 # min_clockwise_signal = 150 - fastest at min
+    # min_clockwise_signal = 120 # max_clockwise_signal = 150 - fastest at max
+    if (velocity < 0 and velocity >= min_velocity):
+        pwm_signal = 150 + velocity*stepsize
+        print("in neg check: ", pwm_signal)
+    elif (velocity > 0 and velocity <= max_velocity):
+        pwm_signal = 150 - velocity*stepsize
+        print("in pos check: ", pwm_signal)
+    elif velocity == 0:
+        pwm_signal = 150 # turns off gripper
+        print("Turning off box motors.")
+    else:
+        print("Carefull, stay within speed boundaries of -130 to 130!")
+
     pwm.set_pwm_freq(50)
-    pwm.set_pwm(gripper_pin, 0, int(speed))
+    pwm.set_pwm(gripper_pin, 0, int(pwm_signal))
+
 
 # Helper function to make setting a servo pulse width simpler.
 def set_servo_pulse(channel, input_speed):
@@ -47,30 +66,16 @@ def set_servo_pulse(channel, input_speed):
 
 
 # callback for gripper motor
-def set_speed_callback(msg):
-    pwm.set_pwm(3, 0, msg.data)
-   # pwm.set_pwm(7, 0,msg.data)
-   # time.sleep(5)
-   # pwm.set_pwm(7, 0, 0)
+# def set_speed_callback(msg):
+    # pwm.set_pwm(3, 0, msg.data)
 
 
 # Main function.
 if __name__ == '__main__':
     # Initialise the PCA9685 using the default address (0x40).
     pwm = Adafruit_PCA9685.PCA9685()
-   # Set frequency to 60hz, good for servos.
-    print('Starting \n')
-    pwm.set_pwm_freq(50)
-    pwm.set_pwm(7,0,150)
-    print('going at 150 = min \n ')
-    time.sleep(3)
-    pwm.set_pwm(7,0,300)
-    print('going at 300 \n ')
-    time.sleep(3)
-    pwm.set_pwm(7,0,350)
-    print('going at 350 \n ')
-    print('Finished')
-  # Initialize the node and name it.
+
+    # Initialize the node and name it.
     rospy.init_node('the_claw')
     rospy.Subscriber("the_claw/MoveBox", MotorCommand, move_box_callback)
     rospy.Subscriber("the_claw/CommandGripper", Int16, gripper_command_callback)
