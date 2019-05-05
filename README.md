@@ -7,9 +7,9 @@ Servo Control notes:
 ## Control Topics
 topic | datatype | description
 --- | --- | ---
-`shy_roboy/nearest_distance` | Float32 | Mean of the closest points to camera (depends on the threshold)
-`shy_roboy/state` | Int8 | 0: IDLE, 1: OCCURED, 2: SHOUT, 3: WATCH (an object / a person was altready asked to leave, but didn't leave yet) 
-
+`the_claw/GoTo` | geometry_msgs/Pose2D | Euclidean coordinates of desired position
+`the_claw/MoveBox` | roboy_middleware_msgs/MotorCommand | Actuate the servos of the box (always id:"0")
+`the_claw/CommandGripper` | std_msgs/Int16 | Commands gripper motor
 #### TODO
 
 - [x] Making servos run
