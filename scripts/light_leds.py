@@ -3,8 +3,8 @@ import time
 import adafruit_dotstar
 import board
 
-num_pixels = 30
-pixels = adafruit_dotstar.DotStar(board.A1, board.A2, num_pixels, brightness=0.1, auto_write=False)
+num_pixels = 20
+pixels = adafruit_dotstar.DotStar(board.SCK, board.MOSI, num_pixels, brightness=0.1, auto_write=False)
 
 
 def wheel(pos):
@@ -125,4 +125,7 @@ while True:
     time.sleep(0.5)
 
     # Increase this number to slow down the rainbow animation.
-    rainbow_cycle(0)
+    while True:
+        rainbow_cycle(0)
+
+
